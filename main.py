@@ -11,6 +11,7 @@ import keyboard
 import winsound
 import hashlib
 import win32gui, win32con
+import subprocess
 import dxcam
 from datetime import datetime, timedelta
 from rapidfuzz import fuzz
@@ -51,6 +52,34 @@ wait_list = {
         'medical': None,
         'armor': None
     }
+
+# Wegame account switcher
+def switch_wegame_account():
+    account = user_config.get('wegame_account')
+    if not account:
+        return
+
+    wegame_path = account.get('path', r'C:\\Program Files\\WeGame\\wegame.exe')
+    username = account.get('username')
+    password = account.get('password')
+
+    if not username or not password:
+        print('wegame_account info incomplete, skip switching')
+        return
+
+    try:
+        subprocess.run(['taskkill', '/IM', 'wegame.exe', '/F'],
+                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    except Exception:
+        pass
+
+    subprocess.Popen(wegame_path)
+    time.sleep(10)
+    pyautogui.write(username)
+    pyautogui.press('tab')
+    pyautogui.write(password)
+    pyautogui.press('enter')
+    time.sleep(10)
 
 # Setup
 def setup_output_directory(output_dir):
@@ -615,6 +644,7 @@ def print_restart_info(remain_time):
 
 def main():
     print('###### 程序初始化 ######')
+    switch_wegame_account()
     background_mode = user_config['background_mode']
     hwnd = win32gui.FindWindow('UnrealWindow', '三角洲行动  ')
     

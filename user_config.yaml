@@ -20,3 +20,7 @@ armor:
 TESSERACT_PATH: .\dist\Tesseract-OCR\tesseract.exe
 background_mode: false
 debug_mode: true
+wegame_account:
+  path: C:\\Program Files\\WeGame\\wegame.exe
+  username: ""
+  password: ""
